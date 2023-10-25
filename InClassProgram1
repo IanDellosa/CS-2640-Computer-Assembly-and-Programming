@@ -1,0 +1,66 @@
+# CS: 2640.01
+# October 20, 2023
+# Write a program in assembly that takes two numbers from
+# a user, and outputs the greater number
+# 1) prompt user to input two numbers
+# 2) Store numbers in registers
+# 3) Compare the numbers
+# 4) Output greater number
+
+
+.data
+prompt1: .asciiz "Please enter the first integer: "
+prompt2: .asciiz "Please enter the second integer: "
+equalNums: .asciiz "The numbers are equal."
+firstNum: .asciiz "The first number is greater."
+secondNum: .asciiz "The second number is greater."
+
+.text
+main:
+	# Create a prompt to have the user input the first number
+	li $v0, 4
+	la $a0, prompt1
+	syscall
+	# Get the first num input from the user
+	li $v0, 5
+	syscall
+	move $s0, $v0
+	# Create prompt to have second integer
+	li $v0, 4
+	la $a0, prompt2
+	syscall
+	# Get second num input from the user
+	li $v0, 5
+	syscall
+	move $s1, $v0
+	
+	# Compare the user inputs
+	beq $s0, $s1, exactlyEqual
+	bgt $s0, $s1, firstGreater
+	blt $s0, $s1, secondGreater
+
+exactlyEqual:
+	#if $s0 and $s1 are exactly equal, print out the equalNums
+	li $v0, 4
+	la $a0, equalNums
+	syscall
+	
+	j exit
+firstGreater:
+	#If first input is greater or equal to second input
+	li $v0, 4
+	la $a0, firstNum
+	syscall
+	
+	j exit
+secondGreater:
+	li $v0, 4
+	la $a0, secondNum
+	syscall
+	
+	j exit
+exit:
+	# Create an exit program syscall
+	li $v0, 10
+	syscall
+	
