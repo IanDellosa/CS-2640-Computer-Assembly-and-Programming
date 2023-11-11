@@ -1,0 +1,63 @@
+.data
+
+
+prompt: .asciiz "Please enter an int: "
+
+
+result: .asciiz "Your int was: "
+
+.text
+
+
+li $v0, 4
+
+
+la $a0, prompt
+
+
+syscall
+
+
+
+
+
+li $v0, 5
+
+
+syscall
+
+
+move $s0, $v0
+
+
+
+
+
+li $v0, 4
+
+
+la $a0, result
+
+
+syscall
+
+
+
+
+
+li $v0, 1
+
+
+la $a0, ($s0)
+
+
+syscall
+
+
+
+
+
+li $v0, 10
+
+
+syscall

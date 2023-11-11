@@ -1,0 +1,16 @@
+.macro exit
+	li $v0, 10
+	syscall
+.end_macro
+
+.data
+string: .asciiz "This program uses an exit macro."
+ 
+.text
+main: 
+
+li $v0, 4
+la $a0, string
+syscall
+
+exit

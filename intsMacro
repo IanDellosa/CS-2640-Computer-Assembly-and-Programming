@@ -1,0 +1,29 @@
+# Create a macro that prints an int the programmer passes into the "ints" macro
+
+.macro ints(%x)
+	li $v0, 1
+	add $a0, $zero, %x
+	syscall
+.end_macro
+
+.data
+prompt: .asciiz "Please input an integer: "
+
+.text
+	li $v0, 4
+	la $a0, prompt
+	syscall
+	
+	li $v0, 5
+	syscall
+	move $s0, $v0
+	
+	ints($s0)
+	ints(1)
+	ints(2)
+	ints(3)
+	ints(4)
+	ints(5)
+
+	li $v0, 10
+	syscall

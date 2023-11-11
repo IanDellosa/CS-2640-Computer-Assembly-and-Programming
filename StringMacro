@@ -1,0 +1,18 @@
+.macro aString(%strings)
+	li $v0, 4
+	.data
+	str: .asciiz %strings
+	.text
+	la $a0, str
+	syscall
+.end_macro
+
+.data
+
+.text
+
+aString("Testing String\n")
+aString("Tomorrow is Thursday\n")
+
+li $v0, 10
+syscall

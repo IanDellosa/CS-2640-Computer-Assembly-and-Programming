@@ -1,0 +1,35 @@
+# Write a program in MIPS that prints a string to the user 5 times then exits the program.
+# Include the following
+# Main label
+# Macro for printing string named “printing”
+# Loop mechanism
+# Exit macro named “exit”
+
+.macro printing
+li $v0, 4
+la $a0, string
+syscall
+.end_macro
+
+.macro exit
+li $v0, 10
+syscall
+.end_macro
+
+.data
+string: .asciiz "This string was printed 5 times\n"
+
+.text
+main:
+
+# Use loop to call printing macro 5 times
+# Initialize loop counter
+	move $t0, $zero
+loop: 
+	beq $t0, 5, end
+	printing
+	add $t0, $t0, 1
+	j loop
+end:
+
+exit

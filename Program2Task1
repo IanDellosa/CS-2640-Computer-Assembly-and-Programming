@@ -1,0 +1,159 @@
+# CS 2640.01
+# November 2, 2023
+# Given a decimal int, return a letter grade.
+
+.macro mainmenu
+	li $v0, 4
+	la $a0, menu
+	syscall
+.end_macro
+
+.macro insertSpacer
+	li $v0, 4
+	la $a0, spacer
+	syscall
+.end_macro
+
+.data
+menu: .asciiz "\n~~~~~~~~~~~~~~~ MAIN MENU ~~~~~~~~~~~~~~~\n(1)Get Letter Grade\n(2)Exit Program\n\nEnter '1' or '2' for your selection: "
+repromptMessage: .asciiz "Please input a valid number: "
+promptScore: .asciiz "Please enter a score as an integer value: "
+spacer: .asciiz "\n-----------------------------------------\n\n"
+
+fMessage: .asciiz "The grade is: F"
+dMessage: .asciiz "The grade is: D"
+cMessage: .asciiz "The grade is: C"
+bMessage: .asciiz "The grade is: B"
+aMessage: .asciiz "The grade is: A"
+
+newScore: .asciiz "Would you like to enter a new score?\n(Y)Yes (N)No\n"
+newScorePrompt: .asciiz "\nEnter 'Y' or 'N' for your selection: "
+
+store: .byte ' '
+
+repromptOptionMessage: .asciiz "\nPlease input a valid option: "
+
+exitMessage: "\nThe program will now exit."
+
+.text
+
+main:
+	mainmenu
+	
+	li $v0, 5
+	syscall
+	move $s0, $v0
+	
+	# Check if 1 or 2
+	beq $s0, 1, score
+	beq $s0, 2, exit
+	bgt $s0, 2, reprompt
+	blt $s0, 1, reprompt
+
+reprompt:
+	li $v0, 4
+	la $a0, repromptMessage
+	syscall
+	
+	li $v0, 5
+	syscall
+	move $s0, $v0
+	
+	# Check if 1 or 2
+	beq $s0, 1, score
+	beq $s0, 2, exit
+	bgt $s0, 2, reprompt
+	blt $s0, 1, reprompt
+
+score:
+	insertSpacer
+
+	li $v0, 4
+	la $a0, promptScore
+	syscall
+	
+	li $v0, 5
+	syscall
+	move $s0, $v0
+	
+	blt $s0, 60, F
+	blt $s0, 70, D
+	blt $s0, 80, C
+	blt $s0, 90, B
+	ble $s0, 100, A
+	
+F: 
+	li $v0, 4
+	la $a0, fMessage
+	syscall
+	
+	j prompt
+
+D: 
+	li $v0, 4
+	la $a0, dMessage
+	syscall
+	
+	j prompt
+	
+C: 
+	li $v0, 4
+	la $a0, cMessage
+	syscall
+	
+	j prompt
+	
+B: 
+	li $v0, 4
+	la $a0, bMessage
+	syscall
+	
+	j prompt
+	
+A: 
+	li $v0, 4
+	la $a0, aMessage
+	syscall
+	
+	j prompt
+	
+prompt:
+	insertSpacer
+	
+	la $a0, newScore
+	syscall
+	
+	la $a0, newScorePrompt
+	syscall
+	
+	li $v0, 12
+	syscall
+	
+	sb $v0, store
+	
+	beq $v0, 'Y', score
+	beq $v0, 'N', main
+	bne $v0, 'Y', repromptOption
+	
+repromptOption:
+	li $v0, 4
+	la $a0, repromptOptionMessage
+	syscall
+	
+	li $v0, 12
+	syscall
+	
+	sb $v0, store
+	
+	beq $v0, 'Y', score
+	beq $v0, 'N', main
+	bne $v0, 'Y', repromptOption
+	
+exit:
+	li $v0, 4
+	la $a0, exitMessage
+	syscall
+
+	li $v0, 10
+	syscall
+	 
